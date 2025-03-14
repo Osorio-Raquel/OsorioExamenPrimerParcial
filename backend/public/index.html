@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .btn {
+            display: block;
+            width: 250px;
+            margin: 10px auto;
+            padding: 15px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Panel de Control</h1>
+
+    <!-- Menú Usuarios -->
+    <button class="btn" onclick="toggleMenu('usuariosMenu')">Usuarios</button>
+    <div id="usuariosMenu" class="hidden">
+        <a href="/usuarios" class="btn">Ver Todos los Usuarios</a>
+        <button class="btn" onclick="buscarUsuario()">Buscar Usuario por ID</button>
+        <button class="btn" onclick="eliminarUsuario()">Eliminar Usuario por ID</button>
+        <button class="btn" onclick="agregarUsuario()">Añadir Usuario</button>
+    </div>
+
+    <!-- Menú Productos -->
+    <button class="btn" onclick="toggleMenu('productosMenu')">Productos</button>
+    <div id="productosMenu" class="hidden">
+        <a href="/productos" class="btn">Ver Todos los Productos</a>
+        <button class="btn" onclick="buscarProducto()">Buscar Producto por ID</button>
+        <button class="btn" onclick="eliminarProducto()">Eliminar Producto por ID</button>
+        <button class="btn" onclick="agregarProducto()">Añadir Producto</button>
+    </div>
+
+    <a href="/contadores" class="btn">Ver Contadores</a>
+    <a href="/operaciones" class="btn">Total de Operaciones</a>
+    <a href="/historial" class="btn">Historial de Operaciones</a>
+
+    <script>
+        function toggleMenu(menuId) {
+            document.getElementById(menuId).classList.toggle("hidden");
+        }
+
+        function buscarUsuario() {
+            const id = prompt("Ingrese el ID del usuario:");
+            if (id) {
+                window.location.href = `/usuarios/${id}`;
+            }
+        }
+
+        function eliminarUsuario() {
+            const id = prompt("Ingrese el ID del usuario a eliminar:");
+            if (id) {
+                fetch(`/usuarios/${id}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => alert(data.mensaje))
+                    .catch(error => alert("Error al eliminar el usuario"));
+            }
+        }
+
+        function agregarUsuario() {
+            const nombre = prompt("Ingrese el nombre del usuario:");
+            const edad = prompt("Ingrese la edad del usuario:");
+            const ocupacion = prompt("Ingrese la ocupación del usuario:");
+
+            if (nombre && edad && ocupacion) {
+                fetch('/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, edad: parseInt(edad), ocupacion })
+                })
+                .then(response => response.json())
+                .then(data => alert("Usuario añadido con éxito"))
+                .catch(error => alert("Error al añadir usuario"));
+            }
+        }
+
+        function buscarProducto() {
+            const id = prompt("Ingrese el ID del producto:");
+            if (id) {
+                window.location.href = `/productos/${id}`;
+            }
+        }
+
+        function eliminarProducto() {
+            const id = prompt("Ingrese el ID del producto a eliminar:");
+            if (id) {
+                fetch(`/productos/${id}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => alert(data.mensaje))
+                    .catch(error => alert("Error al eliminar el producto"));
+            }
+        }
+
+        function agregarProducto() {
+            const nombre = prompt("Ingrese el nombre del producto:");
+            const precio = prompt("Ingrese el precio del producto:");
+            const categoria = prompt("Ingrese la categoría del producto:");
+
+            if (nombre && precio && categoria) {
+                fetch('/productos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, precio: parseFloat(precio), categoria })
+                })
+                .then(response => response.json())
+                .then(data => alert("Producto añadido con éxito"))
+                .catch(error => alert("Error al añadir producto"));
+            }
+        }
+    </script>
+</body>
+</html>
