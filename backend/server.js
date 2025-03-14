@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 let totalOperaciones = 0;
-let historialOperaciones = []; // Almacena todas las operaciones realizadas
+let historialOperaciones = [];
 
 app.use((req, res, next) => {
     totalOperaciones++;
@@ -23,7 +23,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// 📌 **Aquí agregamos la configuración para servir la página**
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
